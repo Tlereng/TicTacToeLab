@@ -1,0 +1,15 @@
+          .root {
+              -fx-background-size: cover;
+          }
+.label {
+    -fx-font-size: 36px;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+    -fx-max-width: 100;
+    -fx-max-height: 100;
+    -fx-background-color: #FFFFFF;
+    -fx-opacity: 1;
+}
