@@ -9,6 +9,28 @@ import java.util.Random;
 
 public class Model {
 
+    // Properties for player and computer scores
+    IntegerProperty playerScore = new SimpleIntegerProperty(0);
+    IntegerProperty computerScore = new SimpleIntegerProperty(0);
+
+    // Properties for individual cells in the game grid
+    StringProperty cell1 = new SimpleStringProperty("");
+    StringProperty cell2 = new SimpleStringProperty("");
+    StringProperty cell3 = new SimpleStringProperty("");
+    StringProperty cell4 = new SimpleStringProperty("");
+    StringProperty cell5 = new SimpleStringProperty("");
+    StringProperty cell6 = new SimpleStringProperty("");
+    StringProperty cell7 = new SimpleStringProperty("");
+    StringProperty cell8 = new SimpleStringProperty("");
+    StringProperty cell9 = new SimpleStringProperty("");
+
+    // Game state variables
+    boolean gameOver = false;
+    String currentPlayer = "X";
+    private static final String PLAYER = "X";
+    private static final String COMPUTER = "O";
+
+    // Getters and setters for player and computer scores
     public int getPlayerScore() {
         return playerScore.get();
     }
@@ -33,57 +55,45 @@ public class Model {
         this.computerScore.set(computerScore);
     }
 
+    // Check if the game is over
     public boolean isGameOver() {
         return gameOver;
     }
 
+    // Set the game over status
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 
+    // Get the current player
     public String getCurrentPlayer() {
         return currentPlayer;
     }
 
+    // Set the current player
     public void setCurrentPlayer(String currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    IntegerProperty playerScore = new SimpleIntegerProperty(0);
-    IntegerProperty computerScore = new SimpleIntegerProperty(0);
-
+    // Array representing possible winning combinations
     static final int[][] possibleWins = {
-            {1,2,3},
-            {4,5,6},
-            {7,8,9},
-            {1,4,7},
-            {2,5,8},
-            {3,6,9},
-            {1,5,9},
-            {3,5,7}
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9},
+            {1, 4, 7},
+            {2, 5, 8},
+            {3, 6, 9},
+            {1, 5, 9},
+            {3, 5, 7}
     };
 
-    StringProperty cell1 = new SimpleStringProperty("");
-    StringProperty cell2 = new SimpleStringProperty("");
-    StringProperty cell3 = new SimpleStringProperty("");
-    StringProperty cell4 = new SimpleStringProperty("");
-    StringProperty cell5 = new SimpleStringProperty("");
-    StringProperty cell6 = new SimpleStringProperty("");
-    StringProperty cell7 = new SimpleStringProperty("");
-    StringProperty cell8 = new SimpleStringProperty("");
-    StringProperty cell9 = new SimpleStringProperty("");
-
-    boolean gameOver = false;
-    String currentPlayer = "X";
-    private static final String PLAYER = "X";
-    private static final String COMPUTER = "O";
-
+    // Handle a cell click
     public void cellClicked(int id) {
-
-        if (!cellValue(id).isEmpty() || gameOver )
+        if (!cellValue(id).isEmpty() || gameOver) {
             return;
+        }
 
-
+        // Set the current player's mark in the clicked cell
         switch (id) {
             case 1 -> setCell1(currentPlayer);
             case 2 -> setCell2(currentPlayer);
@@ -95,12 +105,16 @@ public class Model {
             case 8 -> setCell8(currentPlayer);
             case 9 -> setCell9(currentPlayer);
         }
+
+        // Check if the game is over and switch players
         checkForGameOver();
         if (!gameOver) {
             changePlayer();
             makeComputerMove();
         }
     }
+
+    // Make a move for the computer
     private void makeComputerMove() {
         if (!gameOver && currentPlayer.equals(COMPUTER)) {
             Random random = new Random();
@@ -109,6 +123,7 @@ public class Model {
                 computerMove = random.nextInt(9) + 1;
             } while (!cellValue(computerMove).isEmpty());
 
+            // Set the computer's mark in the chosen cell
             switch (computerMove) {
                 case 1 -> setCell1(COMPUTER);
                 case 2 -> setCell2(COMPUTER);
@@ -121,12 +136,16 @@ public class Model {
                 case 9 -> setCell9(COMPUTER);
             }
 
+            // Check if the game is over and switch players
             checkForGameOver();
             changePlayer();
             makeComputerMove();
         }
     }
+
+    // Prepare the game state for the next round
     private void prepareNextRound() {
+        // Clear all cell values and reset game over status
         setCell1("");
         setCell2("");
         setCell3("");
@@ -139,34 +158,34 @@ public class Model {
         gameOver = false;
     }
 
+    // Check if the game is over
     private void checkForGameOver() {
-        for(var ids: possibleWins){
-
-            if(!cellValue(ids[0]).isEmpty() && cellValue(ids[0]).equals(cellValue(ids[1]))
-                    && cellValue(ids[1]).equals(cellValue(ids[2]))){
+        for (var ids : possibleWins) {
+            // Check for a winning combination
+            if (!cellValue(ids[0]).isEmpty() && cellValue(ids[0]).equals(cellValue(ids[1]))
+                    && cellValue(ids[1]).equals(cellValue(ids[2]))) {
                 gameOver = true;
-                if(cellValue(ids[0]).equals(PLAYER))
-                        setPlayerScore(getPlayerScore()+1);
+                // Update scores based on the winner
+                if (cellValue(ids[0]).equals(PLAYER))
+                    setPlayerScore(getPlayerScore() + 1);
                 else
-                    setComputerScore(getComputerScore()+1);
+                    setComputerScore(getComputerScore() + 1);
                 return;
-
             }
-        gameOver = true;
-        for(int i = 1; i < 10; i++) {
+        }
 
+        // Check for a tie
+        gameOver = true;
+        for (int i = 1; i < 10; i++) {
             if (cellValue(i).isEmpty()) {
                 gameOver = false;
                 break;
             }
         }
-
-        }
-
     }
 
+    // Get the value of a specific cell
     private String cellValue(int id) {
-
         return switch (id) {
             case 1 -> getCell1();
             case 2 -> getCell2();
@@ -181,6 +200,21 @@ public class Model {
         };
     }
 
+    // Set the value of a specific cell
+    private void setCellValue(int id, String value) {
+        switch (id) {
+            case 1 -> setCell1(value);
+            case 2 -> setCell2(value);
+            case 3 -> setCell3(value);
+            case 4 -> setCell4(value);
+            case 5 -> setCell5(value);
+            case 6 -> setCell6(value);
+            case 7 -> setCell7(value);
+            case 8 -> setCell8(value);
+            case 9 -> setCell9(value);
+        }
+    }
+    //Method to change player from person to computer
     private void changePlayer() {
         if (currentPlayer.equals(PLAYER))
             currentPlayer = COMPUTER;
@@ -188,6 +222,7 @@ public class Model {
             currentPlayer = PLAYER;
     }
 
+    // Getters and setters for individual cells
     public String getCell1() {
         return cell1.get();
     }
@@ -296,9 +331,8 @@ public class Model {
         this.cell9.set(cell9);
     }
 
+    // Restart the game
     public void restartGame() {
         prepareNextRound();
-
     }
-
 }
